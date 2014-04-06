@@ -34,10 +34,10 @@ before_install:
     - python setup.py install
     - cd ..
 
-script: True
-    # - make html
-    # - make epub
-    # - make latexpdf
+script:
+    - make html
+    - make epub
+    - make latexpdf
 
 # command to run tests
 # script: nosetests
