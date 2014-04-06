@@ -29,10 +29,8 @@ before_install:
     - sudo apt-get install -qq libpng12-dev libtiff4-dev libwebp-dev
     - sudo apt-get install -qq python-scipy python-imaging python-matplotlib
     - pip install tabulate
-    - git clone https://github.com/icaoberg/falcon-docs.git
-    - cd falcon-docs
-    - pwd
-    - ls
+    - git clone https://github.com/icaoberg/falcon.git
+    - cd falcon
     - python setup.py install
     - cd ..
 
