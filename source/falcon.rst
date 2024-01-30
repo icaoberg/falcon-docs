@@ -4,11 +4,15 @@ falcon Package
 :mod:`falcon` Package
 ----------------------
 
-:mod:`content` Module
----------------------
-
-.. automodule:: falcon.content
+.. automodule:: halcon
     :members:
     :undoc-members:
     :show-inheritance:
 
+:mod:`content` Module
+---------------------
+
+.. automodule:: halcon.content
+    :members:
+    :undoc-members:
+    :show-inheritance:
