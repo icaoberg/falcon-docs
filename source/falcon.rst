@@ -1,14 +1,13 @@
-falcon Package
-===============
+halcon Package
+==============
 
-:mod:`falcon` Package
-----------------------
-
-:mod:`content` Module
+:mod:`halcon` Package
 ---------------------
 
-.. automodule:: falcon.content
+:mod:`halcon.search` Module
+---------------------------
+
+.. automodule:: halcon.search
     :members:
     :undoc-members:
     :show-inheritance:
-

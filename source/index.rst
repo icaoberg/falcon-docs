@@ -23,8 +23,8 @@ Indices and tables
 falcon
 ======
 
-falcon is a python implementation of the eedback Adaptive Loop for
-Content-Based Retrieval (FALCON) algorith as described in
+halcon is a Python implementation of the Feedback Adaptive Loop for
+Content-Based Retrieval (FALCON) algorithm as described in
 
 -  Leejay Wu, Christos Faloutsos, Katia P. Sycara, and Terry R. Payne.
    2000. FALCON: Feedback Adaptive Loop for Content-Based Retrieval. In
@@ -48,68 +48,43 @@ Master branch status
 Pre-Requisites
 --------------
 
+-  mpmath
 -  numpy
 -  scipy
+-  tabulate
 
-To install the prerequisites in Ubuntu 12.04
+Install prerequisites via pip::
 
-::
-
-    sudo apt-get install update
-    sudo apt-get install python-numpy python-scipy
+    pip install mpmath numpy scipy tabulate
 
 Installation
 ============
 
-There are several ways to install falcon. The most common way is to
-download the source code, unzip/untar the source code package and run
-the command
+The package is published on PyPI as ``halcon``. Install it with::
 
-::
+    pip install halcon
 
-    sudo python setup.py install
+To install from source::
 
-I have plans of submitting this package to the Python Package Index. If
-I do so, then should be able to install it by running the command
-
-::
-
-    sudo pip install falcon
-
-**COMMENT**: falcon depends on `numpy <http://www.numpy.org>`__ and
-`scipy <http://www.scipy.org>`__. Installing these packages in Windows
-and MacOSX is not a trivial task. For more information refer to the
-documentation.
-
-If you wish to install falcon in a virtual enviroment, then you can do
-
-::
-
-    virtualenv falcon
+    git clone https://github.com/icaoberg/falcon.git
     cd falcon
-    source ./bin/activate
-    pip install numpy
-    pip install scipy
-    mkdir src
-    cd src
-    git clone git@github.com:icaoberg/falcon.git
-    cd falcon
-    python setup.py install
-    cd ../../
-    deactivate
+    pip install .
 
-**COMMENT**: The previous snippet assumes that you have
-`virtualenv <https://pypi.python.org/pypi/virtualenv>`__ installed in
-your working system.
+To install in a conda environment::
+
+    conda create -n falcon-env python=3.11
+    conda activate falcon-env
+    pip install halcon
+
+**Note**: Python 3.6 or higher is required.
 
 Usage
 -----
 
-There is only one method that you need to know about
+The main entry point is ``halcon.search.query``::
 
-::
-
-    falcon.search.query(good_set, candidates, alpha=-5, 
+    import halcon.search
+    halcon.search.query(good_set, candidates, alpha=-5,
             metric='euclidean', normalization='zscore', debug=False)
 
 Here is a brief description of each of the input arguments
@@ -119,33 +94,27 @@ Here is a brief description of each of the input arguments
 
 ``record = [<identifier>, <initial_score>, <feature_vector>]``
 
-For example in ``wine.py``, I download a CSV file where the first
-``feature_vector`` looks like this
-
-``[1,14.23,1.71,2.43,15.6,127,2.8,3.06,.28,2.29,5.64,1.04,3.92,1065]``
-
-and then I modify it like this
+For example in ``wine.py``, a CSV row is formatted as a record like this
 
 ::
 
-	good_set = []   
-	identifier = 'wine00'   
-	initial_score = 1   
-	feature_vector = [1,14.23,1.71,2.43,15.6,127,2.8,3.06,.28,2.29,5.64,1.04,3.92,1065]   
-	good_set.append([identifier, initial_score, feature_vector])
+    good_set = []
+    identifier = 'wine00'
+    initial_score = 1
+    feature_vector = [1, 14.23, 1.71, 2.43, 15.6, 127, 2.8, 3.06, .28, 2.29, 5.64, 1.04, 3.92, 1065]
+    good_set.append([identifier, initial_score, feature_vector])
 
 
 For more information about the definition of the initial score, please
-refer to the article. In all my examples I use a initial score of 1,
-that is, all images have the same weight. The identifier should be
-unique (though not enforced), so you can tell images apart. This package
+refer to the article. In all my examples I use an initial score of 1,
+that is, all items have the same weight. The identifier should be
+unique (though not enforced), so you can tell items apart. This package
 assumes every object is represented by a
 `feature <http://en.wikipedia.org/wiki/Feature_(machine_learning)>`__
 vector. Feature calculation goes beyond the scope of this package. There
 are many feature calculation/machine learning packages out there that
-you might find useful, like `OpenCV <http://opencv.org/>`__,
-`mahotas <https://pypi.python.org/pypi/mahotas>`__ and
-`SLIC <http://lanec1web1.compbio.cs.cmu.edu/release/>`__.
+you might find useful, like `OpenCV <http://opencv.org/>`__ and
+`mahotas <https://pypi.python.org/pypi/mahotas>`__.
 
 -  ``alpha``. For more information about alpha, please refer to the
    article. The recommended value by the paper is -5, which is the
@@ -153,15 +122,16 @@ you might find useful, like `OpenCV <http://opencv.org/>`__,
 
 -  ``metric``. In the research article, a measure of distance ``d`` is
    used to calculate the distance between two feature vectors. The
-   default value is ``euclidean`` (Euclidean distance) and other
-   supported metrics are ``cityblock`` (Manhattan distance) and
-   ``hamming`` (Hamming distance).
+   default value is ``euclidean`` (Euclidean distance). Other supported
+   metrics are ``cityblock`` (Manhattan distance), ``hamming`` (Hamming
+   distance), ``mahalanobis`` (Mahalanobis distance), and ``seuclidean``
+   (standardized Euclidean distance).
 
 -  ``normalization``. Feature normalization option. Default is
    ``zscore``. Alternative option is ``standard``.
 
--  ``debug``. If debug flag is on, then it should print more information
-   about the calculation as they happen.
+-  ``debug``. If debug flag is on, then it will print more information
+   about the calculation as it happens.
 
 Examples
 --------
@@ -179,25 +149,13 @@ The examples have a dependency that the package does not, since I use
 `tabulate <https://pypi.python.org/pypi/tabulate>`__ to pretty print the
 results from the examples.
 
-In my humble opinion, the best way to run the examples is using
-`virtualenv <https://pypi.python.org/pypi/virtualenv>`__ -which is what
-I do for `travis <https://travis-ci.org/icaoberg/falcon>`__-. The next
-commands assume you have virtualenv available.
+The recommended way to run the examples is in a conda environment::
 
-::
-
-    virtualenv falcon --system-site-packages
-    . ./falcon/bin/activate
-    cd falcon
-    mkdir src
-    cd src
-    pip install numpy
-    pip install scipy
-    pip install tabulate
+    conda create -n falcon-env python=3.11
+    conda activate falcon-env
+    pip install halcon tabulate
     git clone https://github.com/icaoberg/falcon.git
     cd falcon
-    python setup.py install
-    cd ..
     python examples/iris.py
 
 iris.py
